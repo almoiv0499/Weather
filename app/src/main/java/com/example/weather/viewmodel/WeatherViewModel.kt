@@ -14,6 +14,9 @@ class WeatherViewModel(
     private val fetchCurrentWeatherUseCase: FetchCurrentWeatherUseCase
 ) : BaseViewModel() {
 
+    private val _liveDataCity = MutableLiveData<String>()
+    val liveDataCity: LiveData<String> = _liveDataCity
+
     private val _liveDataWeather = MutableLiveData<WeatherView>()
     val liveDataWeather: LiveData<WeatherView> = _liveDataWeather
 
@@ -43,5 +46,9 @@ class WeatherViewModel(
     }
 
     private fun message(res: Int) = setMessage(res)
+
+    fun setCityName(city: String) {
+        _liveDataCity.value = city
+    }
 
 }

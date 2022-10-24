@@ -22,6 +22,10 @@ import java.util.*
 
 class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
 
+    companion object {
+        private const val SAVED_STATE = "city name"
+    }
+
     private lateinit var binding: FragmentWeatherBinding
 
     private val locationManager by lazy(LazyThreadSafetyMode.NONE) {
@@ -44,6 +48,11 @@ class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
     ): View {
 
         binding = FragmentWeatherBinding.inflate(inflater, container, false)
+
+        if (savedInstanceState != null) {
+            val city = savedInstanceState.getString(SAVED_STATE, "")
+            setCityName(city)
+        }
 
         binding.inputCity.setOnKeyListener(this)
 
@@ -122,13 +131,30 @@ class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
     override fun onKey(view: View?, actionId: Int, event: KeyEvent?): Boolean {
         val city = binding.inputCity.text.toString().trim()
         if (event?.action == KeyEvent.ACTION_DOWN && actionId == KeyEvent.KEYCODE_ENTER) {
-            if (city.isNotEmpty()) {
-                fetchWeather(city)
-                return true
-            } else
-                Toast.makeText(requireContext(), getString(R.string.input_city), Toast.LENGTH_SHORT).show()
+            setCityName(city)
+            return true
         }
         return false
+    }
+
+    private fun setCityName(city: String) {
+        viewModel.setCityName(city)
+        viewModel.liveDataCity.observe(requireActivity()) { cityName ->
+            if (cityName.isNotEmpty()) {
+                fetchWeather(cityName)
+            } else
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.input_city_exception),
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val city = binding.inputCity.text.toString().trim()
+        outState.putString(SAVED_STATE, city)
     }
 
 }

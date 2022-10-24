@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="icon_weather">Icon Weather</string>
-    <string name="input_city">Вы не ввели город</string>
+    <string name="input_city">Введите город</string>
+    <string name="input_city_exception">Вы не ввели город</string>
     <string name="exception_message_current">Упс, что-то пошло не так</string>
     <string name="exception_message">Ошибка в названии города</string>
     <string name="get_temperature">%.1f°</string>
