@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="icon_weather">Icon Weather</string>
+    <string name="input_city">Вы не ввели город</string>
+    <string name="exception_message_current">Упс, что-то пошло не так</string>
+    <string name="exception_message">Ошибка в названии города</string>
+    <string name="get_temperature">%.1f°</string>
+    <string name="get_humidity_current">%d%%</string>
+    <string name="get_wind_speed_current">%.1f км/ч</string>
+    <string name="get_max_min_temperature_daily">%.1f°/%.1f°</string>
+    <string name="get_icon_weather">https:%s</string>
+    <string name="get_coordinates">%.2f,%.2f</string>
+</resources>
