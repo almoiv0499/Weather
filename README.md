@@ -3,3 +3,5 @@
 <h4>2. Отображение прогноза погоды за неделю</h4>
 <h4>3. Возможность увидеть прогноз погоды в текущем городе</h4>
 <h4>4. Возможность выбрать любой другой город, и узнать прогноз погоды в нем</h4>
+
+<img src="https://user-images.githubusercontent.com/77741297/197612377-c5ea1860-6426-4a08-8217-61237d00177a.jpeg" width="200" height="500" />  <img src="https://user-images.githubusercontent.com/77741297/197612387-177cf599-3fe6-4aea-82ac-6d6b3d126fb3.jpeg" width="200" height="500" />
