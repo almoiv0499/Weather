@@ -14,15 +14,15 @@ class DailyWeatherViewHolder(private val binding: RecyclerViewDailyWeatherBindin
         with(binding) {
             temperatureDaily.text = context.getString(
                 R.string.get_max_min_temperature_daily,
-                dailyForecast.dayView.maxtemp_c,
-                dailyForecast.dayView.mintemp_c
+                dailyForecast.day.maxTemperature,
+                dailyForecast.day.minTemperature
             )
             dayDaily.text = dailyForecast.date
-            weatherDescriptionDaily.text = dailyForecast.dayView.conditionView.text
+            weatherDescriptionDaily.text = dailyForecast.day.description.description
             Picasso.get().load(
                 context.getString(
                     R.string.get_icon_weather,
-                    dailyForecast.dayView.conditionView.icon
+                    dailyForecast.day.description.icon
                 )
             ).into(iconWeatherDaily)
         }

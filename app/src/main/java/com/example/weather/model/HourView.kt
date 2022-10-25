@@ -1,7 +1,7 @@
 package com.example.weather.model
 
 data class HourView(
-    val conditionView: ConditionView,
-    val temp_c: Double,
+    val description: ConditionView,
+    val temperature: Double,
     val time: String
 )

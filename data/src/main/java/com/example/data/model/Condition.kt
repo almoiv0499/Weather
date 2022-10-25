@@ -1,6 +1,10 @@
 package com.example.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Condition(
-    val text: String,
+    @SerializedName("text")
+    val description: String,
+    @SerializedName("icon")
     val icon: String
 )

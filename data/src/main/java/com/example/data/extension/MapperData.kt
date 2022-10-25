@@ -4,43 +4,43 @@ import com.example.data.model.Weather
 import com.example.domain.model.*
 
 fun Weather.toWeatherDomain(): WeatherDomain = WeatherDomain(
-    currentDomain = CurrentDomain(
-        conditionDomain = ConditionDomain(
-            text = current.condition.text,
-            icon = current.condition.icon
+    current = CurrentDomain(
+        description = ConditionDomain(
+            description = current.description.description,
+            icon = current.description.icon
         ),
         humidity = current.humidity,
-        temp_c = current.temp_c,
-        wind_kph = current.wind_kph
+        temperature = current.temperature,
+        windSpeed = current.windSpeed
     ),
-    forecastDomain = ForecastDomain(
+    forecast = ForecastDomain(
         forecastdayDomain = forecast.forecastday.map { forecastday ->
             ForecastdayDomain(
                 date = forecastday.date,
-                dayDomain = DayDomain(
-                    conditionDomain = ConditionDomain(
-                        text = forecastday.day.condition.text,
-                        icon = forecastday.day.condition.icon
+                day = DayDomain(
+                    description = ConditionDomain(
+                        description = forecastday.day.description.description,
+                        icon = forecastday.day.description.icon
                     ),
-                    maxtemp_c = forecastday.day.maxtemp_c,
-                    mintemp_c = forecastday.day.mintemp_c
+                    maxTemperature = forecastday.day.maxTemperature,
+                    minTemperature = forecastday.day.minTemperature
                 ),
-                hourDomain = forecastday.hour.map { hour ->
+                hour = forecastday.hour.map { hour ->
                     HourDomain(
-                        conditionDomain = ConditionDomain(
-                            text = hour.condition.text,
-                            icon = hour.condition.icon
+                        description = ConditionDomain(
+                            description = hour.description.description,
+                            icon = hour.description.icon
                         ),
-                        temp_c = hour.temp_c,
+                        temperature = hour.temperature,
                         time = hour.time
                     )
                 }
             )
         }
     ),
-    locationDomain = LocationDomain(
-        name = location.name,
-        lat = location.lat,
-        lon = location.lon
+    location = LocationDomain(
+        cityName = location.cityName,
+        latitude = location.latitude,
+        longitude = location.longitude
     )
 )

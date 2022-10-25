@@ -14,11 +14,11 @@ class HourlyWeatherViewHolder(private val binding: RecyclerViewHourlyWeatherBind
         with(binding) {
             timeHourly.text = hourlyForecast.time
             temperatureHourly.text =
-                context.getString(R.string.get_temperature, hourlyForecast.temp_c)
+                context.getString(R.string.get_temperature, hourlyForecast.temperature)
             Picasso.get().load(
                 context.getString(
                     R.string.get_icon_weather,
-                    hourlyForecast.conditionView.icon
+                    hourlyForecast.description.icon
                 )
             ).into(iconWeatherHourly)
         }

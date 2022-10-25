@@ -4,43 +4,43 @@ import com.example.domain.model.WeatherDomain
 import com.example.weather.model.*
 
 fun WeatherDomain.toWeatherView(): WeatherView = WeatherView(
-    currentView = CurrentView(
-        conditionView = ConditionView(
-            text = currentDomain.conditionDomain.text,
-            icon = currentDomain.conditionDomain.icon
+    current = CurrentView(
+        description = ConditionView(
+            description = current.description.description,
+            icon = current.description.icon
         ),
-        humidity = currentDomain.humidity,
-        temp_c = currentDomain.temp_c,
-        wind_kph = currentDomain.wind_kph
+        humidity = current.humidity,
+        temperature = current.temperature,
+        windSpeed = current.windSpeed
     ),
-    forecastView = ForecastView(
-        forecastdayView = forecastDomain.forecastdayDomain.map { forecastDayDomain ->
+    forecast = ForecastView(
+        forecastdayView = forecast.forecastdayDomain.map { forecastDayDomain ->
             ForecastdayView(
                 date = forecastDayDomain.date,
-                dayView = DayView(
-                    conditionView = ConditionView(
-                        text = forecastDayDomain.dayDomain.conditionDomain.text,
-                        icon = forecastDayDomain.dayDomain.conditionDomain.icon
+                day = DayView(
+                    description = ConditionView(
+                        description = forecastDayDomain.day.description.description,
+                        icon = forecastDayDomain.day.description.icon
                     ),
-                    maxtemp_c = forecastDayDomain.dayDomain.maxtemp_c,
-                    mintemp_c = forecastDayDomain.dayDomain.mintemp_c
+                    maxTemperature = forecastDayDomain.day.maxTemperature,
+                    minTemperature = forecastDayDomain.day.minTemperature
                 ),
-                hourView = forecastDayDomain.hourDomain.map { hourDomain ->
+                hour = forecastDayDomain.hour.map { hourDomain ->
                     HourView(
-                        conditionView = ConditionView(
-                            text = hourDomain.conditionDomain.text,
-                            icon = hourDomain.conditionDomain.icon
+                        description = ConditionView(
+                            description = hourDomain.description.description,
+                            icon = hourDomain.description.icon
                         ),
-                        temp_c = hourDomain.temp_c,
+                        temperature = hourDomain.temperature,
                         time = hourDomain.time
                     )
                 }
             )
         }
     ),
-    locationView = LocationView(
-        name = locationDomain.name,
-        lat = locationDomain.lat,
-        lon = locationDomain.lon
+    location = LocationView(
+        cityName = location.cityName,
+        latitude = location.latitude,
+        longitude = location.longitude
     )
 )

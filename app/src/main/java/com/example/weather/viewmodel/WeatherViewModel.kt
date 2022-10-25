@@ -47,7 +47,7 @@ class WeatherViewModel(
 
     private fun message(res: Int) = setMessage(res)
 
-    fun setCityName(city: String) {
+    fun saveSateWeather(city: String) {
         _liveDataCity.value = city
     }
 

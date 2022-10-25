@@ -1,7 +1,7 @@
 package com.example.weather.model
 
 data class LocationView(
-    val name: String,
-    val lat: Double,
-    val lon: Double,
+    val cityName: String,
+    val latitude: Double,
+    val longitude: Double,
 )

@@ -7,7 +7,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weather.R
 import com.example.weather.adapter.HourlyWeatherAdapter
@@ -22,14 +21,10 @@ import java.util.*
 
 class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
 
-    companion object {
-        private const val SAVED_STATE = "city name"
-    }
-
     private lateinit var binding: FragmentWeatherBinding
 
     private val locationManager by lazy(LazyThreadSafetyMode.NONE) {
-        requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        requireActivity().applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
     private val hourlyAdapter by lazy(LazyThreadSafetyMode.NONE) {
@@ -49,12 +44,24 @@ class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
 
         binding = FragmentWeatherBinding.inflate(inflater, container, false)
 
-        if (savedInstanceState != null) {
-            val city = savedInstanceState.getString(SAVED_STATE, "")
-            setCityName(city)
+        binding.inputCity.setOnKeyListener(this)
+
+        viewModel.liveDataWeather.observe(requireActivity()) { weather ->
+            setWeatherData(weather)
+            dailyAdapter.setWeather(weather.forecast.forecastdayView)
+            hourlyAdapter.setHour(weather.forecast.forecastdayView[0].hour)
         }
 
-        binding.inputCity.setOnKeyListener(this)
+        viewModel.liveDataCurrentWeather.observe(requireActivity()) { weather ->
+            binding.progressBar.visibility = View.GONE
+            setWeatherData(weather)
+            dailyAdapter.setWeather(weather.forecast.forecastdayView)
+            hourlyAdapter.setHour(weather.forecast.forecastdayView[0].hour)
+        }
+
+        viewModel.liveDataCity.observe(requireActivity()) { city ->
+            fetchWeather(city)
+        }
 
         setCoordinates()
         setRecyclerViewHourly()
@@ -84,7 +91,7 @@ class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
     private fun setCoordinates() {
         val receivedCoordinates = TrackingUtility.getCoordinate(
             locationManager = locationManager,
-            context = requireContext()
+            context = requireActivity().applicationContext
         )
         val cityCoordinates = String.format(
             Locale.US,
@@ -97,64 +104,34 @@ class WeatherFragment : BaseFragment<WeatherViewModel>(), View.OnKeyListener {
 
     private fun fetchWeather(city: String) {
         viewModel.fetchWeather(city)
-        viewModel.liveDataWeather.observe(requireActivity()) { weather ->
-            setWeatherData(weather)
-            dailyAdapter.setWeather(weather.forecastView.forecastdayView)
-            hourlyAdapter.setHour(weather.forecastView.forecastdayView[0].hourView)
-        }
     }
 
     private fun fetchCurrentWeather(city: String) {
         viewModel.fetchCurrentWeather(city)
-        viewModel.liveDataCurrentWeather.observe(requireActivity()) { weather ->
-            binding.progressBar.visibility = View.GONE
-            setWeatherData(weather)
-            dailyAdapter.setWeather(weather.forecastView.forecastdayView)
-            hourlyAdapter.setHour(weather.forecastView.forecastdayView[0].hourView)
-        }
     }
 
     private fun setWeatherData(weather: WeatherView) {
         binding.temperature.text =
-            getString(R.string.get_temperature, weather.currentView.temp_c)
-        binding.city.text = weather.locationView.name
-        binding.weatherDescription.text = weather.currentView.conditionView.text
+            getString(R.string.get_temperature, weather.current.temperature)
+        binding.city.text = weather.location.cityName
+        binding.weatherDescription.text = weather.current.description.description
         binding.humidity.text =
-            getString(R.string.get_humidity_current, weather.currentView.humidity)
+            getString(R.string.get_humidity_current, weather.current.humidity)
         binding.windSpeed.text =
-            getString(R.string.get_wind_speed_current, weather.currentView.wind_kph)
+            getString(R.string.get_wind_speed_current, weather.current.windSpeed)
         Picasso.get()
-            .load(getString(R.string.get_icon_weather, weather.currentView.conditionView.icon))
+            .load(getString(R.string.get_icon_weather, weather.current.description.icon))
             .into(binding.iconWeather)
     }
 
     override fun onKey(view: View?, actionId: Int, event: KeyEvent?): Boolean {
         val city = binding.inputCity.text.toString().trim()
+        viewModel.saveSateWeather(city)
         if (event?.action == KeyEvent.ACTION_DOWN && actionId == KeyEvent.KEYCODE_ENTER) {
-            setCityName(city)
+            fetchWeather(city)
             return true
         }
         return false
-    }
-
-    private fun setCityName(city: String) {
-        viewModel.setCityName(city)
-        viewModel.liveDataCity.observe(requireActivity()) { cityName ->
-            if (cityName.isNotEmpty()) {
-                fetchWeather(cityName)
-            } else
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.input_city_exception),
-                    Toast.LENGTH_SHORT
-                ).show()
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val city = binding.inputCity.text.toString().trim()
-        outState.putString(SAVED_STATE, city)
     }
 
 }
